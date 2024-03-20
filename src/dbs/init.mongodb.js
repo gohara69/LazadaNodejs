@@ -1,7 +1,8 @@
 'use strict'
 
 const mongoose = require('mongoose')
-const connectionString = 'mongodb://localhost:27017/Instagram'
+const { db: {host, port , name} } = require('../configs/config.mongo')
+const connectionString = `mongodb://${host}:${port}/${name}`
 const {countConnections} = require('../helpers/check.connection')
 
 class Database {
