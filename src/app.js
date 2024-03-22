@@ -9,14 +9,15 @@ const compression = require('compression')
 app.use(morgan('dev'))
 app.use(helmet())
 app.use(compression())
+app.use(express.json())
+app.use(express.urlencoded({
+    extended: true
+}))
 
 //init db
 require('./dbs/init.mongodb')
 
-app.get('/', (req, res, next) => {
-    return res.status(200).json({
-        message: 'Chào mừng đến trang Instagram'
-    })
-})
+//init route
+app.use('', require('../src/routes'))
 
 module.exports =  app 

@@ -1,0 +1,9 @@
+###signup
+POST http://localhost:3305/v1/api/user/signup
+Content-Type: application/json
+
+{
+    "name": "Sonic Chan",
+    "email": "chan.sonic@gmail.com",
+    "password": "abc123"
+}
