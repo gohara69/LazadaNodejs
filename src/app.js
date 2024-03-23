@@ -4,6 +4,7 @@ const app = express()
 const morgan = require('morgan')
 const helmet = require('helmet')
 const compression = require('compression')
+const { checkApiKey } = require('./auths/apiKey.auth')
 
 //init middleware
 app.use(morgan('dev'))
