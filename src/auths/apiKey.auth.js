@@ -1,5 +1,6 @@
 'use strict'
 
+const { ForbiddenRequestResponse } = require("../handlers/handlerError")
 const apiKeyModel = require("../models/apiKey.model")
 
 const HEADER = {
@@ -9,16 +10,12 @@ const HEADER = {
 const checkApiKey = async ( req, res, next ) => {
     const apiKey = req.headers[HEADER.API_KEY]?.toString()
     if(!apiKey){
-        return res.status(403).json({
-            message: 'Forbidden Error'
-        })
+        throw new ForbiddenRequestResponse(403, 'Forbidden Request Error')
     }
 
     const objKey = await apiKeyModel.findOne({key: apiKey, status: true}).lean()
     if(!objKey){
-        return res.status(403).json({
-            message: 'Forbidden Error'
-        })
+        throw new ForbiddenRequestResponse(403, 'Forbidden Request Error')
     }
     req.objKey = objKey
     return next()
@@ -27,16 +24,12 @@ const checkApiKey = async ( req, res, next ) => {
 const checkPermission = (permission) => {
     return (req, res, next) => {
         if(!req.objKey.permissions){
-            return res.status(403).json({
-                message: 'Permission Denied'
-            })
+            throw new ForbiddenRequestResponse(403, 'Forbidden Request Error')
         }
 
         const validPermission = req.objKey.permissions.includes(permission)
         if(!validPermission){
-            return res.status(403).json({
-                message: 'Permission Denied'
-            })
+            throw new ForbiddenRequestResponse(403, 'Forbidden Request Error')
         }
         return next()
     }

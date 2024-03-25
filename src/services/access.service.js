@@ -19,7 +19,8 @@ class AccessService {
     static signUp = async ({name, email, password}) => {
         try {
             const holderUser = await usersModel.findOne({ email: email }).lean()
-            if(holderUser){
+            if(holderUser)
+            {
                 return {
                     code: '402',
                     message: 'Error email registed',

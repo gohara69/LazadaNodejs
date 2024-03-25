@@ -19,6 +19,24 @@ app.use(express.urlencoded({
 require('./dbs/init.mongodb')
 
 //init route
-app.use('', require('../src/routes'))
+app.use('', require('./routes'))
+
+//check not found error
+app.use((req, res, next) => {
+    const error = new Error()
+    error.status = 404
+    error.message = 'Not found'
+    next(error)
+})
+
+app.use((error, req, res, next) => {
+    const status = error.status || 500
+    const message = error.message || 'Internal Server Error'
+    return res.status(status).json({
+        status: 'error',
+        code: status,
+        message: message
+    })
+})
 
 module.exports =  app 
