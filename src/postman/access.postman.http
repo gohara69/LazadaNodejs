@@ -8,3 +8,13 @@ x-api-key: 9aaf87085dcbbdd4241c2661346c2bac5340e3a5a6e65e945ced3535ca1d9586ebfd9
     "email": "chan.sonic3@gmail.com",
     "password": "abc123"
 }
+
+###login
+POST http://localhost:3305/v1/api/user/login
+Content-Type: application/json
+x-api-key: 9aaf87085dcbbdd4241c2661346c2bac5340e3a5a6e65e945ced3535ca1d9586ebfd9f44625adee493c41178de30d0c88b8727fcadb4a17ab2dff08e9a4dc97e
+
+{
+    "email": "chan.sonic3@gmail.com",
+    "password": "abc123"
+}

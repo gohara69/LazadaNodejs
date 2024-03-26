@@ -12,6 +12,14 @@ class AccessController {
             metadata: metadata
         }).send(res)
     }
+
+    static login = async (req, res, next) => {
+        const metadata = await AccessService.login(req.body)
+        new OK({
+            message: 'Login Success',
+            metadata: metadata
+        }).send(res)
+    }
 }
 
 module.exports = AccessController

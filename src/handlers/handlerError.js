@@ -28,8 +28,15 @@ class ForbiddenRequestResponse extends ErrorResponse {
     }
 }
 
+class UnauthorizeRequestResponse extends ErrorResponse {
+    constructor(message) {
+        super(statusCodes.UNAUTHORIZED, message)
+    }
+}
+
 module.exports = {
     BadRequestResponse,
     ConflictRequestResponse,
-    ForbiddenRequestResponse
+    ForbiddenRequestResponse,
+    UnauthorizeRequestResponse
 }
