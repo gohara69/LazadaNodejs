@@ -11,24 +11,20 @@ class ErrorResponse extends Error {
 }
 
 class BadRequestResponse extends ErrorResponse {
-    constructor(status, message) {
-        const statusResponse = status || statusCodes.BAD_REQUEST
-        const messageResponse = message || reasonPhrase.BAD_REQUEST
-        super(statusResponse, messageResponse)
+    constructor(message) {
+        super(statusCodes.BAD_REQUEST, message)
     }
 }
 
 class ConflictRequestResponse extends ErrorResponse {
-    constructor(status, message) {
-        const statusResponse = status || statusCodes.CONFLICT
-        const messageResponse = message || reasonPhrase.CONFLICT
-        super(statusResponse, messageResponse)
+    constructor(message) {
+        super(statusCodes.CONFLICT, message)
     }
 }
 
 class ForbiddenRequestResponse extends ErrorResponse {
-    constructor(status = statusCodes.FORBIDDEN, message) {
-        super(status, message)
+    constructor(message) {
+        super(statusCodes.FORBIDDEN, message)
     }
 }
 
