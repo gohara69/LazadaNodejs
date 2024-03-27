@@ -20,6 +20,13 @@ class AccessController {
             metadata: metadata
         }).send(res)
     }
+
+    static logout = async (req, res, next) => {
+        new OK({
+            message: 'Logout Success',
+            metadata: await AccessService.logout(req.keyToken)
+        })
+    }
 }
 
 module.exports = AccessController

@@ -112,6 +112,12 @@ class AccessService {
             }
         }
     }
+
+    static logout = async ( keyToken ) => {
+        const delToken = await KeyTokenService.removeById(keyToken._id)
+        console.log(`Token bị xóa::`, delToken)
+        return delToken
+    }
 } 
 
 
