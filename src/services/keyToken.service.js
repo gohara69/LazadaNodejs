@@ -35,6 +35,31 @@ class KeyTokenService {
     static removeById = async ( _id ) => {
         return await keyTokenModel.deleteOne({ _id: _id})
     }
+
+    static findKeyContainsX = async ( x ) => {
+        return await keyTokenModel.findOne({refreshTokenUsed: x}).lean()
+    }
+
+    static findByRefreshToken = async ( refreshToken ) => {
+        return await keyTokenModel.findOne({ refreshToken: refreshToken }).lean()
+    }
+
+    static updateToken = async ({_id, newRefreshToken, refreshToken}) => {
+        try {
+            const filter = { _id: _id }, update = {
+                refreshToken: newRefreshToken, 
+                $addToSet: {
+                    refreshTokenUsed: refreshToken
+                }
+            }, options = {
+                upsert: true, //Nếu không kiếm thấy sẽ tạo mới
+                new: true // Nếu cập nhật sẽ quăng thằng vừa mới cập nhật
+            }
+            const token = await keyTokenModel.findOneAndUpdate(filter, update, options)
+        } catch(error){
+            return error
+        }
+    }
 }
 
 module.exports = KeyTokenService

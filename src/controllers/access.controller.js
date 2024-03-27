@@ -27,6 +27,13 @@ class AccessController {
             metadata: await AccessService.logout(req.keyToken)
         })
     }
+
+    static checkRefreshToken = async (req, res, next) => {
+        new OK({
+            message: 'Update Refresh Token Success',
+            metadata: await AccessService.checkRefreshToken(req.body)
+        })
+    }
 }
 
 module.exports = AccessController

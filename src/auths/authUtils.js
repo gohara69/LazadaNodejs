@@ -22,14 +22,6 @@ const createPairTokens = async (payload, publicKey, privateKey) => {
             expiresIn: '7 days'
         })
 
-        JWT.verify(accessToken, publicKey, (err, decode) => {
-            if(err){
-                console.log(`error verify`, err)
-            } else {
-                console.log(`decode verify`, decode)
-            }
-        })
-
         return {accessToken, refreshToken}
     } catch(error){
         console.log(error)
@@ -64,7 +56,12 @@ const authentication = asyncHandler (async (req, res, next) => {
     }
 })
 
+const JWTverify = async (token, publicKey) => {
+    return await JWT.verify(token, publicKey)
+}
+
 module.exports = {
     createPairTokens,
-    authentication
+    authentication,
+    JWTverify
 }

@@ -12,4 +12,5 @@ router.post('/user/login', asyncHandler(accessController.login))
 //Authentication trước khi logout
 router.use(authentication)
 router.post('/user/logout', asyncHandler(accessController.logout))
+router.post('/user/checkrefreshtoken', asyncHandler(accessController.checkRefreshToken))
 module.exports = router
