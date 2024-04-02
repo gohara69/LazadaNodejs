@@ -4,8 +4,12 @@ const app = express()
 const morgan = require('morgan')
 const helmet = require('helmet')
 const compression = require('compression')
+const cors = require('cors')
 
 //init middleware
+app.use(cors({
+    origin: '*'
+}))
 app.use(morgan('dev'))
 app.use(helmet())
 app.use(compression())
