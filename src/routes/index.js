@@ -6,10 +6,12 @@ const router = express.Router()
 const asyncHandler = require('./../helpers/asyncHandler')
 
 //check API key
-router.use(asyncHandler(checkApiKey))
+//router.use(asyncHandler(checkApiKey))
 //check Permission
-router.use(asyncHandler(checkPermission('full')))
+//router.use(asyncHandler(checkPermission('full')))
 
 router.use('/v1/api', require('./access'))
+router.use('/v1/api', require('./apiKey'))
+
 
 module.exports = router
