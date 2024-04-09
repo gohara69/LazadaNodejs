@@ -7,9 +7,7 @@ const compression = require('compression')
 const cors = require('cors')
 
 //init middleware
-app.use(cors({
-    origin: '*'
-}))
+app.use(cors())
 
 app.use(morgan('dev'))
 app.use(helmet())

@@ -109,7 +109,7 @@ class AccessService {
         }
     }
 
-    static logout = async ( keyToken ) => {
+    static logout = async (keyToken) => {
         const delToken = await KeyTokenService.removeById(keyToken._id)
         return delToken
     }
