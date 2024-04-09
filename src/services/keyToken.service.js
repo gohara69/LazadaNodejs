@@ -33,7 +33,7 @@ class KeyTokenService {
     }
 
     static removeById = async ( _id ) => {
-        return await keyTokenModel.deleteOne({ _id: new mongoose.Types.ObjectId(_id)})
+        return await keyTokenModel.deleteOne({ _id: new mongoose.Types.ObjectId(_id)}).lean()
     }
 
     static findKeyContainsX = async ( x ) => {
