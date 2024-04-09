@@ -9,14 +9,8 @@ const cors = require('cors')
 //init middleware
 app.use(cors({
     origin: ['http://localhost:3000/', '*', 'https://lazada-seller-ten.vercel.app'],
-    default: "www.one.com"
+    default: '*'
 }))
-app.all('*', function(req, res, next) {
-    const origin = cors.origin.includes(req.header('origin').toLowerCase()) ? req.headers.origin : cors.default;
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 
 app.use(morgan('dev'))
 app.use(helmet())
