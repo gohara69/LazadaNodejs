@@ -8,8 +8,7 @@ const cors = require('cors')
 
 //init middleware
 app.use(cors({
-    origin: ['http://localhost:3000/', '*', 'https://lazada-seller-ten.vercel.app'],
-    default: '*'
+    origin: '*'
 }))
 
 app.use(morgan('dev'))
