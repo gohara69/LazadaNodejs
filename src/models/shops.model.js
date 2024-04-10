@@ -2,11 +2,11 @@
 
 const { mongoose, model, Schema } = require('mongoose'); // Erase if already required
 
-const DOCUMENT_NAME = 'User'
-const COLLECTION_NAME = 'Users'
+const DOCUMENT_NAME = 'Shop'
+const COLLECTION_NAME = 'Shops'
 
 // Declare the Schema of the Mongo model
-var userSchema = new Schema({
+var shopSchema = new Schema({
     name:{
         type:String,
         trim: true,
@@ -40,4 +40,4 @@ var userSchema = new Schema({
 });
 
 //Export the model
-module.exports = mongoose.model(DOCUMENT_NAME, userSchema);
+module.exports = mongoose.model(DOCUMENT_NAME, shopSchema);

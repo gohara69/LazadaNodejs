@@ -50,6 +50,7 @@ const authentication = asyncHandler (async (req, res, next) => {
             throw new UnauthorizeRequestResponse('Authorization Request Error')
         }
         req.keyToken = keyToken
+        req.userId = userId
         return next()
     } catch (error) {
         throw error

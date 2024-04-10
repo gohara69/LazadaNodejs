@@ -1,6 +1,4 @@
 'use strict'
-
-const usersModel = require("../models/users.model")
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const KeyTokenService = require("./keyToken.service")
@@ -9,7 +7,8 @@ const { ConflictRequestResponse, BadRequestResponse, ForbiddenRequestResponse } 
 const statusCodes = require("../handlers/statusCodes")
 const { createPairTokens, JWTverify } = require('../auths/authUtils')
 const keyTokenModel = require("../models/keyToken.model")
-const UserRole = {
+const shopsModel = require("../models/shops.model")
+const ShopRole = {
     USER: 'USER',
     WRITOR: 'WRITOR',
     EDITOR: 'EDITOR',
@@ -19,15 +18,15 @@ const UserRole = {
 class AccessService {
 
     static signUp = async ({name, email, password}) => {
-        const holderUser = await usersModel.findOne({ email: email }).lean()
-        if(holderUser){
+        const holderShop = await shopsModel.findOne({ email: email }).lean()
+        if(holderShop){
             throw new ConflictRequestResponse('Conflicted Email Error')
         }
             
         const hashPassword = await bcrypt.hash(password, 10);
-        const newUser = await usersModel.create({ name, email, password: hashPassword, roles: [UserRole.USER] })
+        const newShop = await shopsModel.create({ name, email, password: hashPassword, roles: [ShopRole.USER] })
         
-        if(newUser) {
+        if(newShop) {
             const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
                 modulusLength: 4096,
                 publicKeyEncoding: {
@@ -40,10 +39,10 @@ class AccessService {
                 }, 
             })
 
-            const { accessToken, refreshToken } = await createPairTokens({userId: newUser._id, email: email}, publicKey, privateKey)
+            const { accessToken, refreshToken } = await createPairTokens({shopId: newShop._id, email: email}, publicKey, privateKey)
 
             await KeyTokenService.generateToken({
-                userId: newUser._id,
+                shopId: newShop._id,
                 publicKey,
                 privateKey,
                 refreshToken
@@ -52,7 +51,7 @@ class AccessService {
             return {
                 code: statusCodes.CREATED,
                 metadata: {
-                    user: getInfoData({ fields: ['_id', 'name', 'email'], object: newUser}),
+                    shop: getInfoData({ fields: ['_id', 'name', 'email'], object: newUser}),
                     tokens: { accessToken, refreshToken }
                 }
             }
@@ -65,12 +64,12 @@ class AccessService {
     } 
 
     static login = async ({email, password}) => {
-        const holderUser = await usersModel.findOne({ email: email }).lean()
-        if(!holderUser){
+        const holderShop = await shopsModel.findOne({ email: email }).lean()
+        if(!holderShop){
             throw new BadRequestResponse('Email Not Registed')
         }
             
-        const passwordCompare = await bcrypt.compare(password, holderUser.password)
+        const passwordCompare = await bcrypt.compare(password, holderShop.password)
         if(!passwordCompare){
             throw new UnauthorizeRequestResponse('Unauthorize Request Error')
         }
@@ -87,14 +86,14 @@ class AccessService {
             }, 
         })
         
-        const tokens = await createPairTokens({userId: holderUser._id, email: email}, publicKey, privateKey)
+        const tokens = await createPairTokens({userId: holderShop._id, email: email}, publicKey, privateKey)
         
         if(!tokens){
             throw new BadRequestResponse('Create Token Error')
         }
         
         await KeyTokenService.generateToken({
-            userId: holderUser._id,
+            userId: holderShop._id,
             publicKey,
             privateKey,
             refreshToken: tokens.refreshToken
@@ -103,7 +102,7 @@ class AccessService {
         return {
             code: statusCodes.OK,
             metadata: {
-                user: getInfoData({ fields: ['_id', 'name', 'email'], object: holderUser}),
+                user: getInfoData({ fields: ['_id', 'name', 'email'], object: holderShop}),
                 tokens
             }
         }
@@ -132,18 +131,18 @@ class AccessService {
         }
 
         //Kiểm tra user có tồn tại không
-        const foundUser = await KeyTokenService.findByUserId(decode.userId)
-        if(!foundUser){
+        const foundShop = await KeyTokenService.findByUserId(decode.userId)
+        if(!foundShop){
             await KeyTokenService.removeById(holderToken._id)
             throw new ForbiddenRequestResponse('Something Went Wrong! Please relogin')
         }
 
         //RefreshToken bth thì cập nhật lại token
-        const tokens = await createPairTokens({ userId: foundUser._id, email: foundUser.email }, holderToken.publicKey, holderToken.privateKey)
+        const tokens = await createPairTokens({ userId: foundShop._id, email: foundShop.email }, holderToken.publicKey, holderToken.privateKey)
         
         await KeyTokenService.updateToken({_id: holderToken._id, newRefreshToken: tokens.refreshToken, refreshToken: refreshToken})
         return {
-            shop: { userId: foundUser._id, email: foundUser.email },
+            shop: { userId: foundShop._id, email: foundShop.email },
             tokens
         }
     }
