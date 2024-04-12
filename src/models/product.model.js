@@ -30,5 +30,7 @@ productSchema.pre('save', function (next){
     next()
 })
 
+productSchema.index({product_name: 'text', product_description: 'text'})
+
 //Export the model
 module.exports = mongoose.model(DOCUMENT_NAME, productSchema);

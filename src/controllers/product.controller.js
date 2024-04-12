@@ -43,6 +43,13 @@ class ProductController {
             metadata: await ProductService.changeToDraft(req.userId, req.params.id)
         }).send(res)
     }
+
+    static getSearchProduct = async (req, res, next) => {
+        new OK({
+            message: 'Search products success',
+            metadata: await ProductService.getSearchProduct(req.param)
+        }).send(res)
+    }
 }
 
 module.exports = ProductController

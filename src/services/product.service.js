@@ -7,7 +7,8 @@ const {
         getDraftProduct, 
         getPublishedProduct, 
         changeToPublished,
-        changeToDraft
+        changeToDraft,
+        getSearchProduct
 } = require('../repositories/product.repo')
 
 const { BadRequestResponse } = require("../handlers/handlerError")
@@ -43,6 +44,10 @@ class ProductService {
 
     static async changeToDraft(product_shop, _id){
         return await changeToDraft(product_shop, _id)
+    }
+
+    static async getSearchProduct(keySearch){
+        return await getSearchProduct(keySearch)
     }
 }
 

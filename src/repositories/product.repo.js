@@ -41,9 +41,20 @@ const changeToDraft = async (product_shop, _id) => {
     return Document.UPDATED
 }
 
+const getSearchProduct = async (textSearch) => {
+    const searchRex = new RegExp(textSearch)
+    return await productModel.find({
+        "isPublished": true,
+        $text: { $search: searchRex }}, 
+        { score: { $meta: 'textScore' }})
+    .sort({ score: { $meta: 'textScore' } })
+    .lean()            
+}
+
 module.exports = {
     getDraftProduct,
     getPublishedProduct,
     changeToPublished,
-    changeToDraft
+    changeToDraft,
+    getSearchProduct
 }
