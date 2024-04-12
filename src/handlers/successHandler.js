@@ -12,7 +12,6 @@ class SuccessResponse {
     }
 
     send(res){
-        console.log(`This::`, this)
         return res.status(this.statusCode).json(this)
     }
 }

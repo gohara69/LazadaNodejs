@@ -3,6 +3,12 @@
 const productModel = require('../models/product.model')
 const electronicModel = require('../models/electronic.model')
 const clothingModel = require('../models/clothing.model')
+const { 
+        getDraftProduct, 
+        getPublishedProduct, 
+        changeToPublished,
+        changeToDraft
+} = require('../repositories/product.repo')
 
 const { BadRequestResponse } = require("../handlers/handlerError")
 
@@ -19,6 +25,24 @@ class ProductService {
         if(!productClassType)
             throw new BadRequestResponse(`Invalid type: ${type}`)
         return new productClassType(payload).create()
+    }
+
+    static async getDraftProduct(product_shop, limit = 50, skip = 0){
+        const query = { product_shop, isDraft: true }
+        return await getDraftProduct(query, limit, skip)
+    }
+
+    static async getPublishedProduct(product_shop, limit = 50, skip = 0){
+        const query = { product_shop, isPublished: true }
+        return await getPublishedProduct(query, limit, skip)
+    }
+
+    static async changeToPublished(product_shop, _id){
+        return await changeToPublished(product_shop, _id)
+    }
+
+    static async changeToDraft(product_shop, _id){
+        return await changeToDraft(product_shop, _id)
     }
 }
 
@@ -38,6 +62,7 @@ class Product {
     }
 
     async create(_id){
+        console.log(`Product name::`,this.product_name)
         return await productModel.create({
                                             ...this,
                                             _id: _id
@@ -46,6 +71,10 @@ class Product {
 }
 
 class Electronics extends Product {
+    constructor(payload){
+        super(payload)
+    }
+
     async create(){
         const newElectronics = await electronicModel.create({
                                                                 ...this.product_attribute,
@@ -54,6 +83,7 @@ class Electronics extends Product {
         if(!newElectronics){
             throw new BadRequestResponse('Failed to create new Electronics')
         }
+        
         const newProduct = await super.create(newElectronics._id)
         if(!newProduct){
             throw new BadRequestResponse('Failed to create new Product')
