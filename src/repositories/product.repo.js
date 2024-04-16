@@ -2,6 +2,7 @@
 const productModel = require('../models/product.model')
 const { BadRequestResponse } = require("../handlers/handlerError")
 const { Document } = require('../constants/index.constant')
+const { getSelectData, getUnSelectData } = require('../utils/index.utils')
 
 const getProductByState = async (query, limit, skip) => {
     return await productModel.find(query)
@@ -51,10 +52,36 @@ const getSearchProduct = async (textSearch) => {
     .lean()            
 }
 
+const getAllProduct = async (limit, page, sort, filter, select) => {
+    const skip = (page - 1) * limit
+    const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
+    return await productModel.find(filter)
+    .skip(skip)
+    .limit(limit)
+    .sort(sortBy)
+    .select(getSelectData(select))
+    .lean()
+}
+
+const getProductDetail = async (product_id, unselect) => {
+    const query = { "_id": product_id, "isPublished": true }
+
+    return await productModel.find(query)
+    .select(getUnSelectData(unselect))
+    .lean()
+}
+
+const updateProductById = async (_id, model, payload, isNew = true) => {
+    return await model.findByIdAndUpdate(_id, payload, { new: isNew })
+}
+
 module.exports = {
     getDraftProduct,
     getPublishedProduct,
     changeToPublished,
     changeToDraft,
-    getSearchProduct
+    getSearchProduct,
+    getAllProduct,
+    getProductDetail,
+    updateProductById
 }

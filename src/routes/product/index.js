@@ -9,6 +9,8 @@ const router = express.Router()
 // // // //
 // PUBLIC QUERY
 router.get('/search/:keySearch', asyncHandler(productController.getSearchProduct))
+router.get('', asyncHandler(productController.getAllProduct))
+router.get('/:product_id', asyncHandler(productController.getProductDetail))
 // END QUERY
 // // // //
 
@@ -23,8 +25,8 @@ router.post('', asyncHandler(productController.createProduct))
 
 // // // //
 // QUERY
-router.get('/draft', asyncHandler(productController.getDraftProduct))
-router.get('/published', asyncHandler(productController.getPublishedProduct))
+router.get('/draft/all', asyncHandler(productController.getDraftProduct))
+router.get('/published/all', asyncHandler(productController.getPublishedProduct))
 // END QUERY
 // // // //
 
@@ -33,6 +35,12 @@ router.get('/published', asyncHandler(productController.getPublishedProduct))
 router.put('/published/:id', asyncHandler(productController.changeToPublished))
 router.put('/draft/:id', asyncHandler(productController.changeToDraft))
 // END PUT
+// // // //
+
+// // // //
+// PATCH
+router.patch('/:product_id', asyncHandler(productController.updateProduct))
+// END PATCH
 // // // //
 
 module.exports = router

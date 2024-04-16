@@ -47,7 +47,34 @@ class ProductController {
     static getSearchProduct = async (req, res, next) => {
         new OK({
             message: 'Search products success',
-            metadata: await ProductService.getSearchProduct(req.param)
+            metadata: await ProductService.getSearchProduct(req.params)
+        }).send(res)
+    }
+
+    static getAllProduct = async (req, res, next) => {
+        new OK({
+            message: 'Get all products success',
+            metadata: await ProductService.getAllProduct(req.query)
+        }).send(res)
+    }
+
+    static getProductDetail = async (req, res, next) => {
+        new OK({
+            message: 'Get product detail success',
+            metadata: await ProductService.getProductDetail(req.params.product_id)
+        }).send(res)
+    }
+
+    static updateProduct = async (req, res, next) => {
+        new OK({
+            message: 'Update product success',
+            metadata: await ProductService.updateProduct(req.body.product_type, 
+                                                        req.params.product_id,
+                                                        { 
+                                                            ...req.body,
+                                                            product_shop: req.userId
+                                                        }
+                                                        )
         }).send(res)
     }
 }
