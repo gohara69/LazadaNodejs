@@ -6,8 +6,11 @@ const helmet = require('helmet')
 const compression = require('compression')
 const cors = require('cors')
 
-//init middleware
-app.use(cors())
+const corsOptions = {
+    origin: ['*', 'http://localhost:3000/', 'https://lazada-seller-ten.vercel.app'],
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions))
 
 app.use(morgan('dev'))
 app.use(helmet())
