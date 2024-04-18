@@ -6,14 +6,6 @@ const asyncHandler = require('../../helpers/asyncHandler')
 const { authentication } = require('../../auths/authUtils')
 const router = express.Router()
 
-// // // //
-// PUBLIC QUERY
-router.get('/search/:keySearch', asyncHandler(productController.getSearchProduct))
-router.get('', asyncHandler(productController.getAllProduct))
-router.get('/:product_id', asyncHandler(productController.getProductDetail))
-// END QUERY
-// // // //
-
 //Authentication trước khi logout
 router.use(authentication)
 
