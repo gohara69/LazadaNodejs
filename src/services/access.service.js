@@ -2,12 +2,12 @@
 const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const KeyTokenService = require("./keyToken.service")
-const getInfoData = require("../utils/index.utils")
 const { ConflictRequestResponse, BadRequestResponse, ForbiddenRequestResponse } = require("../handlers/handlerError")
 const statusCodes = require("../handlers/statusCodes")
 const { createPairTokens, JWTverify } = require('../auths/authUtils')
 const keyTokenModel = require("../models/keyToken.model")
 const shopsModel = require("../models/shops.model")
+const { getInfoData } = require('../utils/index.utils')
 const ShopRole = {
     USER: 'USER',
     WRITOR: 'WRITOR',
@@ -99,10 +99,13 @@ class AccessService {
             refreshToken: tokens.refreshToken
         })
 
+        const filter = ['_id', 'name', 'email']
+        const user = getInfoData(filter, holderShop)
+
         return {
             code: statusCodes.OK,
             metadata: {
-                user: getInfoData({ fields: ['_id', 'name', 'email'], object: holderShop}),
+                user: user,
                 tokens
             }
         }

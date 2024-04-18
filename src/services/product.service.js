@@ -16,6 +16,7 @@ const {
 
 const { BadRequestResponse } = require("../handlers/handlerError")
 const { updateNestedObject } = require('../utils/index.utils')
+const { createInventory } = require('../repositories/inventory.repo')
 
 //Product factory
 class ProductService {
@@ -98,10 +99,14 @@ class Product {
     }
 
     async create(_id){
-        return await productModel.create({
-                                            ...this,
-                                            _id: _id
-                                        })
+        const newProduct = await productModel.create({
+                                                        ...this,
+                                                        _id: _id
+                                                    })
+        if(newProduct){
+            await createInventory(newProduct._id, 'unknown', this.product_quantity, this.product_shop)
+        }
+        return newProduct
     }
 
     async updateProduct(_id, payload){
