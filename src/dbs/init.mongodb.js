@@ -10,8 +10,8 @@ class Database {
         this.connect()
     }
 
-    connect(type = 'mongodb'){
-        mongoose.connect(connectionString).then(_ => { console.log('Connect Mongodb Success') })
+    connect = async(type = 'mongodb') => {
+        await mongoose.connect(connectionString).then(_ => { console.log('Connect Mongodb Success') })
         .catch(err => { console.log('Error Mongodb') })
         countConnections()
     }
