@@ -6,11 +6,7 @@ const helmet = require('helmet')
 const compression = require('compression')
 const cors = require('cors')
 
-const corsOptions = {
-    origin: ['*', 'http://localhost:3000/', 'https://lazada-seller-ten.vercel.app'],
-    optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions))
+app.use(cors())
 
 app.use(morgan('dev'))
 app.use(helmet())

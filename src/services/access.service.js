@@ -51,7 +51,7 @@ class AccessService {
             return {
                 code: statusCodes.CREATED,
                 metadata: {
-                    shop: getInfoData({ fields: ['_id', 'name', 'email'], object: newUser}),
+                    shop: getInfoData(['_id', 'name', 'email'], newShop),
                     tokens: { accessToken, refreshToken }
                 }
             }
@@ -105,7 +105,7 @@ class AccessService {
         return {
             code: statusCodes.OK,
             metadata: {
-                user: user,
+                shop: user,
                 tokens
             }
         }
