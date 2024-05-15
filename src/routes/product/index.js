@@ -18,6 +18,7 @@ router.post('', asyncHandler(productController.createProduct))
 // QUERY
 router.get('/draft/all', asyncHandler(productController.getDraftProduct))
 router.get('/published/all', asyncHandler(productController.getPublishedProduct))
+router.get('/seller/all', asyncHandler(productController.getAllSellerProduct))
 // END QUERY
 // // // //
 

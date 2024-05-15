@@ -20,6 +20,10 @@ const getPublishedProduct = async (query, limit, skip) => {
     return await getProductByState(query, limit, skip)
 }  
 
+const getSellerProduct = async (query, limit, skip) => {
+    return await getProductByState(query, limit, skip)
+}  
+
 const changeToPublished = async (product_shop, _id) => {
     const filter = { "_id": _id, "product_shop": product_shop}
     const update = { isDraft: false, isPublished: true }
@@ -83,5 +87,6 @@ module.exports = {
     getSearchProduct,
     getAllProduct,
     getProductDetail,
-    updateProductById
+    updateProductById,
+    getSellerProduct
 }

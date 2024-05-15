@@ -51,6 +51,13 @@ class ProductController {
         }).send(res)
     }
 
+    static getAllSellerProduct = async (req, res, next) => {
+        new OK({
+            message: 'Get all products success',
+            metadata: await ProductService.getAllSellerProduct(req.userId)
+        }).send(res)
+    }
+
     static getAllProduct = async (req, res, next) => {
         new OK({
             message: 'Get all products success',

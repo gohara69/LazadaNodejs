@@ -18,8 +18,8 @@ var productSchema = new Schema({
     product_shop: { type: Schema.Types.ObjectId, required:true, ref: 'Shop' },
     product_attribute: { type: Schema.Types.Mixed, required: true },
     product_variations: { type: Array, default: [] },
-    isDraft: { type: Boolean, default: true, index: true, select: false },
-    isPublished: { type: Boolean, default: false, index: true, select: false }
+    isDraft: { type: Boolean, default: true, index: true },
+    isPublished: { type: Boolean, default: false, index: true }
 }, {
     timestamps: true,
     collection: COLLECTION_NAME

@@ -11,7 +11,8 @@ const {
         getSearchProduct,
         getAllProduct,
         getProductDetail,
-        updateProductById
+        updateProductById,
+        getSellerProduct
 } = require('../repositories/product.repo')
 
 const { BadRequestResponse } = require("../handlers/handlerError")
@@ -67,6 +68,11 @@ class ProductService {
     static async getPublishedProduct(product_shop, limit = 50, skip = 0){
         const query = { "product_shop": product_shop, "isPublished": true }
         return await getPublishedProduct(query, limit, skip)
+    }
+
+    static async getAllSellerProduct(product_shop, limit = 50, skip = 0){
+        const query = { "product_shop": product_shop }
+        return await getSellerProduct(query, limit, skip)
     }
 
     static async getSearchProduct(keySearch){
