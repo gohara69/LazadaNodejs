@@ -79,8 +79,10 @@ class ProductService {
         return await getSearchProduct(keySearch)
     }
 
-    static async getAllProduct(limit = 50, page = 1, sort = 'ctime', filter = { isPublished: true }, select = []){
-        return await getAllProduct(limit, page, sort, filter, select)
+    static async getAllProduct(limit = 50, page = 1, sort = 'ctime', filter = { isPublished: true }){
+        return await getAllProduct(limit, page, sort, filter, 
+            ['product_name', 'product_thumbnail', 'product_price', 'product_shop']
+        )
     }
 
     static async getProductDetail(product_id, unselect = []){
@@ -166,16 +168,11 @@ class Clothing extends Product {
         let objectParam = this
 
         if(objectParam.product_attribute){
-            console.log(`attribute trước khi remove:`, objectParam.product_attribute)
             const productAttribute = updateNestedObject(objectParam.product_attribute)
-            console.log(`attribute sau khi remove:`, productAttribute)
-
             await updateProductById(_id, clothingModel, productAttribute)
         }
 
-        console.log(`product trước khi remove:`, objectParam)
         const product = updateNestedObject(objectParam)
-        console.log(`product sau khi remove:`, product)
         const updateProduct = await super.updateProduct(_id, product)
         return updateProduct
     }

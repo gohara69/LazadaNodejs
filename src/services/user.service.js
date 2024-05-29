@@ -5,27 +5,21 @@ const KeyTokenService = require("./keyToken.service")
 const { ConflictRequestResponse, BadRequestResponse, ForbiddenRequestResponse } = require("../handlers/handlerError")
 const statusCodes = require("../handlers/statusCodes")
 const { createPairTokens, JWTverify } = require('../auths/authUtils')
-const shopsModel = require("../models/shops.model")
+const usersModel = require("../models/user.model")
 const { getInfoData } = require('../utils/index.utils')
-const ShopRole = {
-    USER: 'USER',
-    WRITOR: 'WRITOR',
-    EDITOR: 'EDITOR',
-    ADMIN: 'ADMIN'
-}
 
-class AccessService {
+class UserService {
 
     static signUp = async ({name, email, password}) => {
-        const holderShop = await shopsModel.findOne({ email: email }).lean()
-        if(holderShop){
+        const existedUser = await usersModel.findOne({ email: email }).lean()
+        if(existedUser){
             throw new ConflictRequestResponse('Conflicted Email Error')
         }
             
         const hashPassword = await bcrypt.hash(password, 10);
-        const newShop = await shopsModel.create({ name, email, password: hashPassword, roles: [ShopRole.USER] })
+        const newUser = await usersModel.create({ name, email, password: hashPassword })
         
-        if(newShop) {
+        if(newUser) {
             const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
                 modulusLength: 4096,
                 publicKeyEncoding: {
@@ -38,10 +32,10 @@ class AccessService {
                 }, 
             })
 
-            const { accessToken, refreshToken } = await createPairTokens({shopId: newShop._id, email: email}, publicKey, privateKey)
+            const { accessToken, refreshToken } = await createPairTokens({userId: newUser._id, email: email}, publicKey, privateKey)
 
             await KeyTokenService.generateToken({
-                userId: newShop._id,
+                userId: newUser._id,
                 publicKey,
                 privateKey,
                 refreshToken
@@ -50,7 +44,7 @@ class AccessService {
             return {
                 code: statusCodes.CREATED,
                 metadata: {
-                    shop: getInfoData(['_id', 'name', 'email'], newShop),
+                    shop: getInfoData(['_id', 'name', 'email'], newUser),
                     tokens: { accessToken, refreshToken }
                 }
             }
@@ -63,12 +57,12 @@ class AccessService {
     } 
 
     static login = async ({email, password}) => {
-        const holderShop = await shopsModel.findOne({ email: email }).lean()
-        if(!holderShop){
+        const holderUser = await usersModel.findOne({ email: email }).lean()
+        if(!holderUser){
             throw new BadRequestResponse('Email Not Registed')
         }
             
-        const passwordCompare = await bcrypt.compare(password, holderShop.password)
+        const passwordCompare = await bcrypt.compare(password, holderUser.password)
         if(!passwordCompare){
             throw new UnauthorizeRequestResponse('Unauthorize Request Error')
         }
@@ -85,25 +79,25 @@ class AccessService {
             }, 
         })
         
-        const tokens = await createPairTokens({userId: holderShop._id, email: email}, publicKey, privateKey)
+        const tokens = await createPairTokens({userId: holderUser._id, email: email}, publicKey, privateKey)
         
         if(!tokens){
             throw new BadRequestResponse('Create Token Error')
         }
         
         await KeyTokenService.generateToken({
-            userId: holderShop._id,
+            userId: holderUser._id,
             publicKey,
             privateKey,
             refreshToken: tokens.refreshToken
         })
 
         const filter = ['_id', 'name', 'email']
-        const user = getInfoData(filter, holderShop)
+        const user = getInfoData(filter, holderUser)
         return {
             code: statusCodes.OK,
             metadata: {
-                shop: user,
+                user: user,
                 tokens
             }
         }
@@ -150,4 +144,4 @@ class AccessService {
 } 
 
 
-module.exports = AccessService
+module.exports = UserService

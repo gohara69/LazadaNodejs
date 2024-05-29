@@ -1,19 +1,19 @@
 'use strict'
 
 const { OK, Created } = require("../handlers/successHandler")
-const AccessService = require("../services/access.service")
+const UserService = require("../services/user.service")
 
 class AccessController {
     static signUp = async (req, res, next) => {
-        const metadata = await AccessService.signUp(req.body)
+        const metadata = await UserService.signUp(req.body)
         new Created({
-            message: 'Create Shop Account Success',
+            message: 'Create User Account Success',
             metadata: metadata
         }).send(res)
     }
 
     static login = async (req, res, next) => {
-        const metadata = await AccessService.login(req.body)
+        const metadata = await UserService.login(req.body)
         new OK({
             message: 'Login Success',
             metadata: metadata
@@ -23,7 +23,7 @@ class AccessController {
     static logout = async (req, res, next) => {
         new OK({
             message: 'Logout Success',
-            metadata: await AccessService.logout(req.keyToken)
+            metadata: await UserService.logout(req.keyToken)
         }).send(res)
     }
 

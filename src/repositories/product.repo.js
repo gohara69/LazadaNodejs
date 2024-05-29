@@ -2,7 +2,7 @@
 const productModel = require('../models/product.model')
 const { BadRequestResponse } = require("../handlers/handlerError")
 const { Document } = require('../constants/index.constant')
-const { getSelectData, getUnSelectData } = require('../utils/index.utils')
+const { getSelectData, getUnSelectData, getObjectId } = require('../utils/index.utils')
 
 const getProductByState = async (query, limit, skip) => {
     return await productModel.find(query)
@@ -79,6 +79,10 @@ const updateProductById = async (_id, model, payload, isNew = true) => {
     return await model.findByIdAndUpdate(_id, payload, { new: isNew })
 }
 
+const getProductById = async (productId) => {
+    return await productModel.findOne({_id: productId}).lean()
+}
+
 module.exports = {
     getDraftProduct,
     getPublishedProduct,
@@ -88,5 +92,6 @@ module.exports = {
     getAllProduct,
     getProductDetail,
     updateProductById,
-    getSellerProduct
+    getSellerProduct,
+    getProductById
 }

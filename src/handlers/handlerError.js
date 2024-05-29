@@ -34,9 +34,16 @@ class UnauthorizeRequestResponse extends ErrorResponse {
     }
 }
 
+class NotFoundRequestResponse extends ErrorResponse {
+    constructor(message) {
+        super(statusCodes.NOT_FOUND, message)
+    }
+}
+
 module.exports = {
     BadRequestResponse,
     ConflictRequestResponse,
     ForbiddenRequestResponse,
-    UnauthorizeRequestResponse
+    UnauthorizeRequestResponse,
+    NotFoundRequestResponse
 }
