@@ -86,8 +86,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Contact**
 
-Have a question? Feel free to contact me at [your email address].
+Have a question? Feel free to contact me at [your email address] [Dealwithvu](https://www.dealwithvu.com).
 ```
 This is a basic example, and you can customize it to fit your specific project's needs. You can find more detailed templates and examples online for inspiration!
 Website distribute
-[Dealwithvu](https://www.dealwithvu.com)
+
