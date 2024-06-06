@@ -90,4 +90,4 @@ Have a question? Feel free to contact me at [your email address].
 ```
 This is a basic example, and you can customize it to fit your specific project's needs. You can find more detailed templates and examples online for inspiration!
 Website distribute
-<a href='https://www.dealwithvu.com/'>Dealwithvu</a>
+[Dealwithvu](https://www.dealwithvu.com)
